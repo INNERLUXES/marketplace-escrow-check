@@ -1,0 +1,41 @@
+{
+  "notes": "Made-up escrow configuration for the examples of marketplace-escrow-check: every name, address and hash is made up, and nothing here is legal or financial advice.",
+  "chainId": 1,
+  "tokens": [
+    { "symbol": "USDC", "address": "0x8888888888888888888888888888888888888888", "decimals": 6, "chainId": 1 },
+    { "symbol": "ETH", "native": true, "decimals": 18, "chainId": 1 }
+  ],
+  "platformFee": { "bps": 250, "recipient": "0x2222222222222222222222222222222222222222" },
+  "escrow": {
+    "releaseMode": "both",
+    "releaseTimeout": 1209600,
+    "disputeWindow": 604800,
+    "refundPath": ["seller", "arbiter"],
+    "partialRefunds": true,
+    "milestones": [
+      { "name": "Design", "shareBps": 3000 },
+      { "name": "Build", "shareBps": 3000 },
+      { "name": "Handover", "shareBps": 4000 }
+    ],
+    "termsHash": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "dispute": {
+    "arbiters": ["0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "0xcccccccccccccccccccccccccccccccccccccccc", "0xdddddddddddddddddddddddddddddddddddddddd", "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"],
+    "panelSize": 3,
+    "quorum": 2,
+    "arbiterFeeBps": 100,
+    "appealWindow": 259200
+  },
+  "stake": { "amount": "100", "token": "USDC", "slashBps": 5000 },
+  "roles": {
+    "owner": "0x2222222222222222222222222222222222222222",
+    "pauser": "0x5555555555555555555555555555555555555555",
+    "upgrader": "0x9999999999999999999999999999999999999999",
+    "feeSetter": "0x2222222222222222222222222222222222222222",
+    "treasury": "0x2222222222222222222222222222222222222222",
+    "timelock": "0x9999999999999999999999999999999999999999",
+    "multisig": { "address": "0x2222222222222222222222222222222222222222", "threshold": 3, "signers": ["0x3333333333333333333333333333333333333333", "0x4444444444444444444444444444444444444444", "0x6666666666666666666666666666666666666666", "0x7777777777777777777777777777777777777777", "0xffffffffffffffffffffffffffffffffffffffff"] }
+  },
+  "eip712": { "name": "Example Escrow", "version": "1", "chainId": 1, "verifyingContract": "0x1111111111111111111111111111111111111111", "salt": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" },
+  "limits": { "maxOrderValue": "50000", "token": "USDC" }
+}

@@ -1,0 +1,67 @@
+marketplace-escrow-check: examples/good/escrow.json
+file: examples/good/escrow.json (JSON, 41 lines, 2,337 bytes)
+chain id: 1
+tokens: 2: USDC, at 0x8888888888888888888888888888888888888888, 6 decimals, chain id 1; ETH, native, 18 decimals, chain id 1
+platform fee: 250 basis points (2.5%) to 0x2222222222222222222222222222222222222222
+escrow: release on buyer confirmation or after a timeout; release timeout 1,209,600 seconds (14 days); dispute window 604,800 seconds (7 days); refund by seller and arbiter; partial refunds allowed; 3 milestones (Design 30%, Build 30%, Handover 40%)
+dispute: 5 arbiters, panel of 3, quorum of 2, arbiter fee 100 basis points (1%), appeal window 259,200 seconds (3 days)
+stake: 100 USDC, slash 5,000 basis points (50%)
+eip712 domain: name Example Escrow, version 1, chain id 1, verifying contract 0x1111111111111111111111111111111111111111
+max order: 50000 USDC
+max fee: 1,000 basis points (10%), from --max-fee-bps
+findings: 0
+
+Checks (32)
+
+  check                           level    kind           findings
+  file-unreadable                 error    input          0
+  field-missing                   error    input          0
+  field-unknown                   warning  input          0
+  field-invalid                   error    input          0
+  field-duplicate                 error    input          0
+  secret-in-file                  error    input          0
+  fee-invalid                     error    input          0
+  release-before-dispute-window   error    best practice  0
+  no-refund-path                  error    best practice  0
+  release-timeout-missing         warning  best practice  0
+  fee-too-high                    warning  best practice  0
+  fee-recipient-zero              error    best practice  0
+  milestone-shares-not-100        error    best practice  0
+  milestone-empty                 error    best practice  0
+  quorum-unreachable              error    best practice  0
+  single-arbiter                  warning  best practice  0
+  arbiter-is-party                warning  best practice  0
+  arbiter-is-admin                warning  best practice  0
+  appeal-window-missing           info     best practice  0
+  stake-slash-invalid             error    best practice  0
+  admin-single-key                warning  documented     0
+  multisig-threshold-low          warning  documented     0
+  multisig-threshold-unreachable  error    best practice  0
+  upgrader-without-timelock       info     best practice  0
+  eip712-domain-chain-mismatch    error    documented     0
+  eip712-domain-missing-field     warning  best practice  0
+  verifying-contract-zero         error    documented     0
+  token-chain-mismatch            error    best practice  0
+  token-decimals-invalid          error    best practice  0
+  address-malformed               error    best practice  0
+  zero-address                    error    best practice  0
+  max-order-missing               info     best practice  0
+
+Findings (0)
+
+  none
+
+Roles (7)
+
+  role        address                                     held by
+  owner       0x2222222222222222222222222222222222222222  multisig
+  pauser      0x5555555555555555555555555555555555555555  one key
+  upgrader    0x9999999999999999999999999999999999999999  timelock
+  fee setter  0x2222222222222222222222222222222222222222  multisig
+  treasury    0x2222222222222222222222222222222222222222  multisig
+  timelock    0x9999999999999999999999999999999999999999  timelock
+  multisig    0x2222222222222222222222222222222222222222  3 of 5 signers
+
+This report is an input to a review of a marketplace escrow configuration before its contracts are deployed: not legal or financial advice, not an audit of the escrow contracts and not a guarantee that funds will be released or refunded as intended.
+
+RESULT: PASS - no finding at or above error

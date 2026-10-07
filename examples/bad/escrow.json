@@ -1,0 +1,39 @@
+{
+  "notes": "Made-up escrow configuration for the examples of marketplace-escrow-check: every name, address and hash is made up, and nothing here is legal or financial advice.",
+  "chainId": 1,
+  "tokens": [
+    { "symbol": "USDC", "address": "0x8888888888888888888888888888888888888888", "decimals": 18, "chainId": 1 },
+    { "symbol": "WETH", "address": "0x12345", "decimals": 18, "chainId": 10 }
+  ],
+  "platformFee": { "bps": 1500, "recipient": "0x0000000000000000000000000000000000000000" },
+  "escrow": {
+    "releaseMode": "both",
+    "releaseTimeout": 259200,
+    "disputeWindow": 604800,
+    "refundPath": "none",
+    "partialRefunds": "yes",
+    "milestones": [
+      { "name": "Design", "shareBps": 5000 },
+      { "name": "Build", "shareBps": 3000 },
+      { "shareBps": 0 }
+    ]
+  },
+  "dispute": {
+    "arbiters": ["0x7777777777777777777777777777777777777777", "0x5555555555555555555555555555555555555555", "0x7777777777777777777777777777777777777777"],
+    "panelSize": 1,
+    "quorum": 2,
+    "arbiterFeeBps": "2.5",
+    "appealWindw": 86400
+  },
+  "stake": { "amount": "100", "token": "USDC", "slashBps": 12000 },
+  "roles": {
+    "owner": "0x1111111111111111111111111111111111111111",
+    "pauser": "0x5555555555555555555555555555555555555555",
+    "upgrader": "0x6666666666666666666666666666666666666666",
+    "feeSetter": "0x0000000000000000000000000000000000000000",
+    "treasury": "0x7777777777777777777777777777777777777777",
+    "mnemonic": "lantern lantern lantern lantern lantern lantern lantern lantern lantern lantern lantern lantern",
+    "multisig": { "address": "0x2222222222222222222222222222222222222222", "threshold": 3, "signers": ["0x3333333333333333333333333333333333333333", "0x4444444444444444444444444444444444444444"] }
+  },
+  "eip712": { "name": "Example Escrow", "chainId": 10, "verifyingContract": "0x0000000000000000000000000000000000000000" }
+}

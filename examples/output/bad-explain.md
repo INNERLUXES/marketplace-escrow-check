@@ -1,0 +1,183 @@
+# marketplace-escrow-check: examples/bad/escrow.json
+
+- File: examples/bad/escrow.json \(JSON, 39 lines, 1,894 bytes\)
+- Chain id: 1
+- Tokens: 2: USDC, at 0x8888888888888888888888888888888888888888, 18 decimals, chain id 1; WETH, at 0x12345, 18 decimals, chain id 10
+- Platform fee: 1,500 basis points \(15%\) to 0x0000000000000000000000000000000000000000
+- Escrow: release on buyer confirmation or after a timeout; release timeout 259,200 seconds \(3 days\); dispute window 604,800 seconds \(7 days\); refund path none; 3 milestones \(Design 50%, Build 30%, milestone 3 0%\)
+- Dispute: 3 arbiters, panel of 1, quorum of 2, appeal window none
+- Stake: 100 USDC, slash not read
+- Eip712 domain: name Example Escrow, version none, chain id 10, verifying contract 0x0000000000000000000000000000000000000000
+- Max order: not set
+- Max fee: 1,000 basis points \(10%\), from --max-fee-bps
+- Findings: 31 \(19 error, 9 warning, 3 info\)
+- Result: **FAIL - 19 findings at or above error \(19 error, 9 warning, 3 info\)**
+
+## Findings
+
+| Level | Check | Where | Message |
+| --- | --- | --- | --- |
+| error | token-decimals-invalid | examples/bad/escrow.json:5 | Token USDC has 18 decimal places, but USDC keeps 6, so every amount in it would be off by a factor of 10^12. This is a best practice of this tool, not a rule in the pages it cites. Fix: Write the decimals the token contract answers from decimals\(\); USDC on most chains has 6. |
+| error | address-malformed | examples/bad/escrow.json:6 | The address of token WETH, "0x12345", has 5 characters after 0x, not 40; an address is 0x followed by 40 hex digits. This is a best practice of this tool, not a rule in the pages it cites. Fix: Copy the address again from the wallet or the deployment. |
+| error | token-chain-mismatch | examples/bad/escrow.json:6 | Token WETH is declared on chain id 10, but the escrow is deployed on chain id 1; the address of a token on one chain is another contract, or none, on the next. This is a best practice of this tool, not a rule in the pages it cites. Fix: Use the address of the token on the chain the escrow is deployed on, or correct the chain id. |
+| error | fee-recipient-zero | examples/bad/escrow.json:8 | The platform fee of 1,500 basis points \(15%\) goes to the zero address, which no one holds, so every fee is lost. This is a best practice of this tool, not a rule in the pages it cites. Fix: Send the fee to the treasury of the marketplace, best a multisig, or set the fee to 0. |
+| error | release-before-dispute-window | examples/bad/escrow.json:11 | The escrow releases funds after 259,200 seconds \(3 days\), before its dispute window of 604,800 seconds \(7 days\) closes, so the seller can be paid before the buyer had the whole window to open a dispute. This is a best practice of this tool, not a rule in the pages it cites. Fix: Make the release timeout longer than the dispute window, so that no release by time can fire while a dispute may still be opened. |
+| error | no-refund-path | examples/bad/escrow.json:13 | The escrow names "none" as its refundPath, so funds of an order that fails can only go to the seller or stay locked. This is a best practice of this tool, not a rule in the pages it cites. Fix: Name at least one refund path: a cancel by the seller, a ruling of the arbiters, or a refund by time when the seller does not deliver. |
+| error | field-invalid | examples/bad/escrow.json:14 | The partialRefunds of the escrow is "yes"; it must be true or false. Fix: Write the value as docs/inputs.md shows: text for addresses, symbols and choices, whole numbers for chain ids, decimals, seconds, counts and basis points, plain decimal numbers for amounts, true or false for flags. |
+| error | milestone-shares-not-100 | examples/bad/escrow.json:15 | The shares of the 3 milestones of the escrow add up to 8,000 basis points \(80%\), not 10,000 basis points \(100%\), so 2,000 basis points \(20%\) of every order is never released. This is a best practice of this tool, not a rule in the pages it cites. Fix: Set the shares so that they add up to 10000 basis points. |
+| error | field-missing | examples/bad/escrow.json:18 | Milestone 3 has no name. Fix: Add the field named; docs/inputs.md lists what the file needs. |
+| error | milestone-empty | examples/bad/escrow.json:18 | Milestone 3 has a share of 0, so it releases nothing. This is a best practice of this tool, not a rule in the pages it cites. Fix: Remove the empty milestone or give it a share, or leave milestones out for an order paid in one release. |
+| error | field-duplicate | examples/bad/escrow.json:22 | Arbiter 3 of the dispute setup, 0x7777777777777777777777777777777777777777, is also arbiter 1; it was counted once. Fix: List each token, arbiter and signer once, and give every milestone a name of its own. |
+| error | quorum-unreachable | examples/bad/escrow.json:24 | The quorum of a dispute is 2 votes, but a panel holds 1 arbiter, so no dispute can ever be decided and its funds stay locked. This is a best practice of this tool, not a rule in the pages it cites. Fix: Set a quorum no larger than the panel and a panel no larger than the number of arbiters, or add arbiters. |
+| error | fee-invalid | examples/bad/escrow.json:25 | The arbiterFeeBps of the dispute setup is "2.5"; it must be a whole number of basis points from 0 to 10000, where 100 is 1%. Fix: Write the fee as a whole number of basis points, where 100 is 1% and 10000 is the whole order, such as 250 for 2.5%. |
+| error | stake-slash-invalid | examples/bad/escrow.json:28 | The slashBps of the stake is "12000"; it must be a whole number of basis points from 0 to 10000 of the stake. This is a best practice of this tool, not a rule in the pages it cites. Fix: Write the slash share as a whole number of basis points of the stake, from 0 to 10000, and set the stake above 0 if it can be slashed. |
+| error | zero-address | examples/bad/escrow.json:33 | The fee setter of the roles is the zero address, which no one holds, so the role can never act. This is a best practice of this tool, not a rule in the pages it cites. Fix: Set the real address; write a native token with "native": true and no address. |
+| error | secret-in-file | examples/bad/escrow.json:35 | The file holds the key "mnemonic", which names a seed, a mnemonic or a private key. The tool never reads one, and the value is not shown. Fix: Remove the value from the file and from wherever the file was copied, treat it as exposed and move what it controls to a new key. A deployment configuration names wallets by their public address only. |
+| error | multisig-threshold-unreachable | examples/bad/escrow.json:36 | The multisig needs 3 signatures but lists 2 signers, so it can never act. This is a best practice of this tool, not a rule in the pages it cites. Fix: Lower the threshold to the number of signers or fewer, or add the missing signers. |
+| error | eip712-domain-chain-mismatch | examples/bad/escrow.json:38 | The chainId of the EIP-712 domain is 10, but the escrow is deployed on chain id 1. EIP-712 has a wallet decline to sign when the chainId of the domain is not the one of the active chain, so listings would be refused or signed for another chain. Fix: Set the chainId of the domain to the chain the escrow is deployed on, or correct the chain id of the file. |
+| error | verifying-contract-zero | examples/bad/escrow.json:38 | The verifyingContract of the EIP-712 domain is the zero address, though EIP-712 has the field name the contract that checks the signature; no contract is at the zero address, so a signed listing names none. Fix: Set verifyingContract to the address of the escrow or marketplace contract that checks signed listings. |
+| warning | fee-too-high | examples/bad/escrow.json:8 | The platform fee is 1,500 basis points \(15%\), above the 1,000 basis points \(10%\) of --max-fee-bps. This is a best practice of this tool, not a rule in the pages it cites. Fix: Lower the fee, or raise --max-fee-bps for a marketplace whose fee is high on purpose. |
+| warning | arbiter-is-party | examples/bad/escrow.json:22 | Arbiter 1 of the dispute setup, 0x7777777777777777777777777777777777777777, is also the treasury, so it rules on disputes over money it is paid from. This is a best practice of this tool, not a rule in the pages it cites. Fix: Choose arbiters who are paid neither the platform fee nor from the treasury, or keep the overlap and say so to buyers and sellers. |
+| warning | arbiter-is-admin | examples/bad/escrow.json:22 | Arbiter 2 of the dispute setup, 0x5555555555555555555555555555555555555555, is also the pauser of the escrow, so one party can both rule on a dispute and change the rules. This is a best practice of this tool, not a rule in the pages it cites. Fix: Choose arbiters who hold no role of the contracts. |
+| warning | single-arbiter | examples/bad/escrow.json:23 | A panel of a dispute holds one arbiter, so one person decides every dispute alone. This is a best practice of this tool, not a rule in the pages it cites. Fix: Name more arbiters and a panel of three or more with a majority quorum, so that no one person decides alone. |
+| warning | field-unknown | examples/bad/escrow.json:26 | The key "appealWindw" of the dispute setup is not one the tool reads, so its value was left out of every check. Did you mean "appealWindow"? The keys of the dispute setup are arbiters, panelSize, quorum, arbiterFeeBps, appealWindow, notes. Fix: Correct the spelling to a field of docs/inputs.md, or remove it. |
+| warning | admin-single-key | examples/bad/escrow.json:30 | The owner of the escrow, 0x1111111111111111111111111111111111111111, is not the multisig of the file, so one key can change every rule of the escrow. The ethereum.org page on smart contract security calls one owner key a single point of failure and suggests a multi-signature account. Fix: Make the owner, the fee setter and the treasury the multisig, and the upgrader the multisig or a timelock it controls; set them in roles. |
+| warning | admin-single-key | examples/bad/escrow.json:32 | The upgrader of the escrow, 0x6666666666666666666666666666666666666666, is not the multisig of the file or its timelock, so one key can replace the code of the escrow. The ethereum.org page on smart contract security calls one owner key a single point of failure and suggests a multi-signature account. Fix: Make the owner, the fee setter and the treasury the multisig, and the upgrader the multisig or a timelock it controls; set them in roles. |
+| warning | admin-single-key | examples/bad/escrow.json:34 | The treasury of the escrow, 0x7777777777777777777777777777777777777777, is not the multisig of the file, so one key holds the fees of the marketplace. The ethereum.org page on smart contract security calls one owner key a single point of failure and suggests a multi-signature account. Fix: Make the owner, the fee setter and the treasury the multisig, and the upgrader the multisig or a timelock it controls; set them in roles. |
+| warning | eip712-domain-missing-field | examples/bad/escrow.json:38 | The EIP-712 domain has no version, so a listing signed in it is not bound to this version. This is a best practice of this tool, not a rule in the pages it cites. Fix: Give the domain its name, version, chainId and verifyingContract, so that a signature is bound to this marketplace, this version, this chain and this contract. |
+| info | max-order-missing | examples/bad/escrow.json:1 | The file sets no limits.maxOrderValue, so one order can lock any amount in the escrow. This is a best practice of this tool, not a rule in the pages it cites. Fix: Set limits.maxOrderValue with its token, at the largest order the marketplace means to hold. |
+| info | appeal-window-missing | examples/bad/escrow.json:21 | The dispute setup gives no appealWindow, so a ruling is final at once. This is a best practice of this tool, not a rule in the pages it cites. Fix: Add an appeal window in seconds if a ruling may be appealed, or keep rulings final on purpose. |
+| info | upgrader-without-timelock | examples/bad/escrow.json:32 | The upgrader of the escrow, 0x6666666666666666666666666666666666666666, is not a timelock, and the roles name none, so an upgrade takes effect at once and users cannot leave first. This is a best practice of this tool, not a rule in the pages it cites. Fix: Name a timelock in roles.timelock and make it the upgrader, or keep upgrades immediate on purpose and say so. |
+
+## Basis
+
+### token-decimals-invalid
+
+- The tool's own choice: checking the decimals of a token is a best practice of this tool, not a rule in the pages it cites; a price worked out with the wrong decimals is off by powers of ten
+
+### address-malformed
+
+- The tool's own choice: checking the form of an address is a best practice of this tool, not a rule in the pages it cites; the form is the one wallets write on an EVM chain, and no page is saved for it
+
+### token-chain-mismatch
+
+- The tool's own choice: matching each token with the chain of the file is a best practice of this tool, not a rule in the pages it cites; the address of a token on one chain is another contract, or none, on the next
+
+### fee-recipient-zero
+
+- The tool's own choice: refusing the zero address as the recipient of a fee is a best practice of this tool, not a rule in the pages it cites; a fee sent there is burnt, and a constructor that takes a zero recipient seldom says so
+
+### release-before-dispute-window
+
+- The tool's own choice: comparing the release timeout with the dispute window is a best practice of this tool, not a rule in the pages it cites; the cited pages say nothing of escrow, and a release that can beat a dispute leaves the dispute with nothing to decide
+
+### no-refund-path
+
+- The tool's own choice: asking for a refund path is a best practice of this tool, not a rule in the pages it cites; an escrow that can only release is a payment with a delay, not an escrow
+
+### field-invalid
+
+- A problem with the file itself; it rests on no page.
+
+### milestone-shares-not-100
+
+- The tool's own choice: adding up the shares of the milestones is a best practice of this tool, not a rule in the pages it cites; a split that is not the whole order leaves funds behind or over-pays
+
+### field-missing
+
+- A problem with the file itself; it rests on no page.
+
+### milestone-empty
+
+- The tool's own choice: refusing a milestone of nothing is a best practice of this tool, not a rule in the pages it cites; a step that releases 0 is almost always a share written in the wrong place
+
+### field-duplicate
+
+- A problem with the file itself; it rests on no page.
+
+### quorum-unreachable
+
+- The tool's own choice: comparing the quorum, the panel and the arbiters is a best practice of this tool, not a rule in the pages it cites; a dispute that can never be decided locks the funds of both sides
+
+### fee-invalid
+
+- A problem with the file itself; it rests on no page.
+
+### stake-slash-invalid
+
+- The tool's own choice: checking the slash share against the stake is a best practice of this tool, not a rule in the pages it cites; a share above the whole stake cannot be paid and a share of a stake of 0 slashes nothing
+
+### zero-address
+
+- The tool's own choice: refusing the zero address in a role or a token is a best practice of this tool, not a rule in the pages it cites; a role held by no one is lost for good once the contract is deployed
+
+### secret-in-file
+
+- A problem with the file itself; it rests on no page.
+
+### multisig-threshold-unreachable
+
+- The tool's own choice: comparing the threshold with the signers is a best practice of this tool, not a rule in the pages it cites; the cited page describes a minimum number of signatures but not this mistake
+
+### eip712-domain-chain-mismatch
+
+- In the signing domain of EIP-712 the chainId field holds the EIP-155 id of the chain, and a wallet is expected to decline to sign when that id is not the one of the chain it is connected to. (EIP-712: Typed structured data hashing and signing, <https://eips.ethereum.org/EIPS/eip-712>)
+
+### verifying-contract-zero
+
+- In the signing domain of EIP-712 the verifyingContract field names the contract that is to check the signature, and a wallet may use it to guard against phishing. (EIP-712: Typed structured data hashing and signing, <https://eips.ethereum.org/EIPS/eip-712>)
+
+### fee-too-high
+
+- The tool's own choice: warning above 1000 basis points is a best practice of this tool, not a rule in the pages it cites; the cited pages set no fee, and the threshold can be changed with --max-fee-bps
+
+### arbiter-is-party
+
+- The tool's own choice: keeping arbiters apart from the money of the marketplace is a best practice of this tool, not a rule in the pages it cites; the cited pages say nothing of disputes
+
+### arbiter-is-admin
+
+- The tool's own choice: keeping arbiters apart from the roles that change the contracts is a best practice of this tool, not a rule in the pages it cites; an arbiter who can upgrade or pause the escrow can decide a dispute twice
+
+### single-arbiter
+
+- The tool's own choice: asking for more than one arbiter is a best practice of this tool, not a rule in the pages it cites; a small marketplace may start with one on purpose, so it is a warning
+
+### field-unknown
+
+- A problem with the file itself; it rests on no page.
+
+### admin-single-key
+
+- The ethereum.org page on smart contract security calls one address as the owner of a contract a single point of failure: whoever gets the keys of that address can attack the contract. (Smart contract security, ethereum.org developer documentation, <https://ethereum.org/en/developers/docs/smart-contracts/security/>)
+- The same page suggests managing a contract from a multi-signature account, which acts only with the signatures of a minimum number of its owners, so that a change needs the consent of more than one party. (Smart contract security, ethereum.org developer documentation, <https://ethereum.org/en/developers/docs/smart-contracts/security/>)
+
+### eip712-domain-missing-field
+
+- The tool's own choice: asking for all four fields is a best practice of this tool, not a rule in the pages it cites; EIP-712 lets a protocol leave out the fields that do not fit it, but a listing signed without them can be used where it was not meant to be
+
+### max-order-missing
+
+- The tool's own choice: asking for a largest order is a best practice of this tool, not a rule in the pages it cites; a cap limits what one bug or one dispute can lock, but many escrows have none, so it is a note
+
+### appeal-window-missing
+
+- The tool's own choice: noting that a ruling cannot be appealed is a best practice of this tool, not a rule in the pages it cites; appeals are common but not universal, so it is a note
+
+### upgrader-without-timelock
+
+- The tool's own choice: asking for a timelock in front of upgrades is a best practice of this tool, not a rule in the pages it cites; the security page of ethereum.org names timelocks for governance and emergency stops, not for upgrades, so it is a note
+
+## Roles (7)
+
+| Role | Address | Held by |
+| --- | --- | --- |
+| owner | 0x1111111111111111111111111111111111111111 | one key |
+| pauser | 0x5555555555555555555555555555555555555555 | one key |
+| upgrader | 0x6666666666666666666666666666666666666666 | one key |
+| fee setter | 0x0000000000000000000000000000000000000000 | zero address |
+| treasury | 0x7777777777777777777777777777777777777777 | one key |
+| timelock | - | - |
+| multisig | 0x2222222222222222222222222222222222222222 | 3 of 2 signers |
+
+This report is an input to a review of a marketplace escrow configuration before its contracts are deployed: not legal or financial advice, not an audit of the escrow contracts and not a guarantee that funds will be released or refunded as intended.

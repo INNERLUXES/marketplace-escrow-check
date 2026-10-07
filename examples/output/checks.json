@@ -1,0 +1,299 @@
+[
+  {
+    "id": "file-unreadable",
+    "severity": "error",
+    "kind": "input",
+    "summary": "the configuration is not JSON the reader can follow, or its top level is not an object, so nothing in it was read",
+    "fix": "Write the configuration as one JSON object with the chain id, the tokens, the fee, the escrow rules, the dispute setup, the roles and the EIP-712 domain (docs/inputs.md); fix the line named.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "field-missing",
+    "severity": "error",
+    "kind": "input",
+    "summary": "a field the checks need is not in the file: the chain id, the tokens, the platform fee, the escrow, the dispute setup, the roles or the EIP-712 domain, the symbol, address, decimals or chain id of a token, the bps of the fee or its recipient, the release mode, the release timeout of a timed release or the dispute window, the name or share of a milestone, the arbiters, panel size or quorum, the amount, token or slash share of a stake, the owner, or the address, threshold or signers of a multisig",
+    "fix": "Add the field named; docs/inputs.md lists what the file needs.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "field-unknown",
+    "severity": "warning",
+    "kind": "input",
+    "summary": "a key the tool does not read, often a misspelt one; its value was left out of every check",
+    "fix": "Correct the spelling to a field of docs/inputs.md, or remove it.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "field-invalid",
+    "severity": "error",
+    "kind": "input",
+    "summary": "a value of the wrong type or form: text where a whole number belongs, a release mode or refund path the tool does not know, a share of a milestone that is not a whole number of basis points, an amount with more places than its token, a token that is not one of the file, a hash that is not 64 hex digits, a release timeout with a release by the buyer alone, or a native token with an address",
+    "fix": "Write the value as docs/inputs.md shows: text for addresses, symbols and choices, whole numbers for chain ids, decimals, seconds, counts and basis points, plain decimal numbers for amounts, true or false for flags.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "field-duplicate",
+    "severity": "error",
+    "kind": "input",
+    "summary": "one token symbol or token address listed twice, one arbiter or one signer listed twice, or two milestones of one name, so a reader of the file cannot tell them apart",
+    "fix": "List each token, arbiter and signer once, and give every milestone a name of its own.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "secret-in-file",
+    "severity": "error",
+    "kind": "input",
+    "summary": "the file holds a private key, a seed or a mnemonic, under a key named for one or as a value shaped like one; the tool never reads it and never shows it",
+    "fix": "Remove the value from the file and from wherever the file was copied, treat it as exposed and move what it controls to a new key. A deployment configuration names wallets by their public address only.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "fee-invalid",
+    "severity": "error",
+    "kind": "input",
+    "summary": "the platform fee or the arbiter fee is not a whole number of basis points from 0 to 10000",
+    "fix": "Write the fee as a whole number of basis points, where 100 is 1% and 10000 is the whole order, such as 250 for 2.5%.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "release-before-dispute-window",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the escrow releases funds on a timeout that ends at or before the dispute window closes, so the seller can be paid before the buyer had the whole window to open a dispute",
+    "fix": "Make the release timeout longer than the dispute window, so that no release by time can fire while a dispute may still be opened.",
+    "basis": [],
+    "own": "comparing the release timeout with the dispute window is a best practice of this tool, not a rule in the pages it cites; the cited pages say nothing of escrow, and a release that can beat a dispute leaves the dispute with nothing to decide"
+  },
+  {
+    "id": "no-refund-path",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the escrow names no way back to the buyer: no refund path, an empty one or \"none\", so funds of an order that fails can only go to the seller or stay locked",
+    "fix": "Name at least one refund path: a cancel by the seller, a ruling of the arbiters, or a refund by time when the seller does not deliver.",
+    "basis": [],
+    "own": "asking for a refund path is a best practice of this tool, not a rule in the pages it cites; an escrow that can only release is a payment with a delay, not an escrow"
+  },
+  {
+    "id": "release-timeout-missing",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "funds are released only when the buyer confirms, with no release by time, so a buyer who never confirms and never disputes keeps the funds of the seller locked for good",
+    "fix": "Set releaseMode to both and give a releaseTimeout longer than the dispute window, so funds are released when the buyer stays silent.",
+    "basis": [],
+    "own": "asking for a release by time is a best practice of this tool, not a rule in the pages it cites; some marketplaces release only on confirmation on purpose, so it is a warning"
+  },
+  {
+    "id": "fee-too-high",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "the platform fee or the arbiter fee is above --max-fee-bps (1000 basis points, 10%, by default)",
+    "fix": "Lower the fee, or raise --max-fee-bps for a marketplace whose fee is high on purpose.",
+    "basis": [],
+    "own": "warning above 1000 basis points is a best practice of this tool, not a rule in the pages it cites; the cited pages set no fee, and the threshold can be changed with --max-fee-bps"
+  },
+  {
+    "id": "fee-recipient-zero",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the platform fee is above 0 and goes to the zero address, which no one holds, so every fee is lost",
+    "fix": "Send the fee to the treasury of the marketplace, best a multisig, or set the fee to 0.",
+    "basis": [],
+    "own": "refusing the zero address as the recipient of a fee is a best practice of this tool, not a rule in the pages it cites; a fee sent there is burnt, and a constructor that takes a zero recipient seldom says so"
+  },
+  {
+    "id": "milestone-shares-not-100",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the shares of the milestones do not add up to 10000 basis points, the whole order, so part of the funds is never released or more is released than was paid",
+    "fix": "Set the shares so that they add up to 10000 basis points.",
+    "basis": [],
+    "own": "adding up the shares of the milestones is a best practice of this tool, not a rule in the pages it cites; a split that is not the whole order leaves funds behind or over-pays"
+  },
+  {
+    "id": "milestone-empty",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the milestones are an empty list, or a milestone has a share of 0, so a step releases nothing",
+    "fix": "Remove the empty milestone or give it a share, or leave milestones out for an order paid in one release.",
+    "basis": [],
+    "own": "refusing a milestone of nothing is a best practice of this tool, not a rule in the pages it cites; a step that releases 0 is almost always a share written in the wrong place"
+  },
+  {
+    "id": "quorum-unreachable",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the quorum of a dispute is above the size of the panel, or the panel is larger than the list of arbiters, so a dispute can never be decided",
+    "fix": "Set a quorum no larger than the panel and a panel no larger than the number of arbiters, or add arbiters.",
+    "basis": [],
+    "own": "comparing the quorum, the panel and the arbiters is a best practice of this tool, not a rule in the pages it cites; a dispute that can never be decided locks the funds of both sides"
+  },
+  {
+    "id": "single-arbiter",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "one arbiter decides every dispute: the list holds one arbiter, or the panel has a size of 1",
+    "fix": "Name more arbiters and a panel of three or more with a majority quorum, so that no one person decides alone.",
+    "basis": [],
+    "own": "asking for more than one arbiter is a best practice of this tool, not a rule in the pages it cites; a small marketplace may start with one on purpose, so it is a warning"
+  },
+  {
+    "id": "arbiter-is-party",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "an arbiter is also the recipient of the platform fee or the treasury, so it decides disputes on money it is paid from",
+    "fix": "Choose arbiters who are paid neither the platform fee nor from the treasury, or keep the overlap and say so to buyers and sellers.",
+    "basis": [],
+    "own": "keeping arbiters apart from the money of the marketplace is a best practice of this tool, not a rule in the pages it cites; the cited pages say nothing of disputes"
+  },
+  {
+    "id": "arbiter-is-admin",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "an arbiter is also the owner, the pauser, the upgrader, the fee setter, the timelock or the multisig of the escrow, so one party can both rule on a dispute and change the rules",
+    "fix": "Choose arbiters who hold no role of the contracts.",
+    "basis": [],
+    "own": "keeping arbiters apart from the roles that change the contracts is a best practice of this tool, not a rule in the pages it cites; an arbiter who can upgrade or pause the escrow can decide a dispute twice"
+  },
+  {
+    "id": "appeal-window-missing",
+    "severity": "info",
+    "kind": "best practice",
+    "summary": "the dispute setup gives no appeal window, or one of 0 seconds, so a ruling is final at once; a note, since many marketplaces have no appeal",
+    "fix": "Add an appeal window in seconds if a ruling may be appealed, or keep rulings final on purpose.",
+    "basis": [],
+    "own": "noting that a ruling cannot be appealed is a best practice of this tool, not a rule in the pages it cites; appeals are common but not universal, so it is a note"
+  },
+  {
+    "id": "stake-slash-invalid",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the slash share of the stake of a seller is not a whole number of basis points from 0 to 10000, or is above 0 on a stake of 0",
+    "fix": "Write the slash share as a whole number of basis points of the stake, from 0 to 10000, and set the stake above 0 if it can be slashed.",
+    "basis": [],
+    "own": "checking the slash share against the stake is a best practice of this tool, not a rule in the pages it cites; a share above the whole stake cannot be paid and a share of a stake of 0 slashes nothing"
+  },
+  {
+    "id": "admin-single-key",
+    "severity": "warning",
+    "kind": "documented",
+    "summary": "the owner, the upgrader, the fee setter or the treasury is not the multisig of the file (or, for the upgrader, its timelock), so one key can change the escrow, take its fees or move its funds",
+    "fix": "Make the owner, the fee setter and the treasury the multisig, and the upgrader the multisig or a timelock it controls; set them in roles.",
+    "basis": [
+      "security-single-owner",
+      "security-multisig"
+    ],
+    "own": null
+  },
+  {
+    "id": "multisig-threshold-low",
+    "severity": "warning",
+    "kind": "documented",
+    "summary": "the multisig needs only one signature, so any one of its signers acts alone",
+    "fix": "Set the threshold to at least 2, and to a majority of the signers for the roles of the escrow.",
+    "basis": [
+      "security-multisig"
+    ],
+    "own": null
+  },
+  {
+    "id": "multisig-threshold-unreachable",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the threshold of the multisig is above the number of its signers, so it can never act",
+    "fix": "Lower the threshold to the number of signers or fewer, or add the missing signers.",
+    "basis": [],
+    "own": "comparing the threshold with the signers is a best practice of this tool, not a rule in the pages it cites; the cited page describes a minimum number of signatures but not this mistake"
+  },
+  {
+    "id": "upgrader-without-timelock",
+    "severity": "info",
+    "kind": "best practice",
+    "summary": "the escrow can be upgraded by a role that is not a timelock, so an upgrade takes effect at once and users cannot leave first; a note",
+    "fix": "Name a timelock in roles.timelock and make it the upgrader, or keep upgrades immediate on purpose and say so.",
+    "basis": [],
+    "own": "asking for a timelock in front of upgrades is a best practice of this tool, not a rule in the pages it cites; the security page of ethereum.org names timelocks for governance and emergency stops, not for upgrades, so it is a note"
+  },
+  {
+    "id": "eip712-domain-chain-mismatch",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "the chainId of the EIP-712 domain differs from the chain id of the file, though a wallet is to decline to sign for a chain id that is not the active one",
+    "fix": "Set the chainId of the domain to the chain the escrow is deployed on, or correct the chain id of the file.",
+    "basis": [
+      "eip712-chain-id"
+    ],
+    "own": null
+  },
+  {
+    "id": "eip712-domain-missing-field",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "the EIP-712 domain of signed listings leaves out its name, version, chainId or verifyingContract",
+    "fix": "Give the domain its name, version, chainId and verifyingContract, so that a signature is bound to this marketplace, this version, this chain and this contract.",
+    "basis": [],
+    "own": "asking for all four fields is a best practice of this tool, not a rule in the pages it cites; EIP-712 lets a protocol leave out the fields that do not fit it, but a listing signed without them can be used where it was not meant to be"
+  },
+  {
+    "id": "verifying-contract-zero",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "the verifyingContract of the EIP-712 domain is the zero address, though the field names the contract that checks the signature",
+    "fix": "Set verifyingContract to the address of the escrow or marketplace contract that checks signed listings.",
+    "basis": [
+      "eip712-verifying-contract"
+    ],
+    "own": null
+  },
+  {
+    "id": "token-chain-mismatch",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "a payment token is declared on another chain id than the chain of the file",
+    "fix": "Use the address of the token on the chain the escrow is deployed on, or correct the chain id.",
+    "basis": [],
+    "own": "matching each token with the chain of the file is a best practice of this tool, not a rule in the pages it cites; the address of a token on one chain is another contract, or none, on the next"
+  },
+  {
+    "id": "token-decimals-invalid",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "the decimals of a payment token are not a whole number from 0 to 36, or differ from the places of a token the tool knows (USDC and USDT 6, WBTC 8, DAI, WETH and ETH 18)",
+    "fix": "Write the decimals the token contract answers from decimals(); USDC on most chains has 6.",
+    "basis": [],
+    "own": "checking the decimals of a token is a best practice of this tool, not a rule in the pages it cites; a price worked out with the wrong decimals is off by powers of ten"
+  },
+  {
+    "id": "address-malformed",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "an address of a token, a role, the multisig or a signer, an arbiter, the fee recipient or the verifying contract that is not 0x and 40 hex digits",
+    "fix": "Copy the address again from the wallet or the deployment.",
+    "basis": [],
+    "own": "checking the form of an address is a best practice of this tool, not a rule in the pages it cites; the form is the one wallets write on an EVM chain, and no page is saved for it"
+  },
+  {
+    "id": "zero-address",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "a token, a role, the timelock, the multisig, a signer or an arbiter is the zero address, which no one holds, so the role can never act or the token cannot be paid",
+    "fix": "Set the real address; write a native token with \"native\": true and no address.",
+    "basis": [],
+    "own": "refusing the zero address in a role or a token is a best practice of this tool, not a rule in the pages it cites; a role held by no one is lost for good once the contract is deployed"
+  },
+  {
+    "id": "max-order-missing",
+    "severity": "info",
+    "kind": "best practice",
+    "summary": "the file sets no largest order value, so one order can lock any amount in the escrow; a note",
+    "fix": "Set limits.maxOrderValue with its token, at the largest order the marketplace means to hold.",
+    "basis": [],
+    "own": "asking for a largest order is a best practice of this tool, not a rule in the pages it cites; a cap limits what one bug or one dispute can lock, but many escrows have none, so it is a note"
+  }
+]

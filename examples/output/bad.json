@@ -1,0 +1,805 @@
+{
+  "tool": "marketplace-escrow-check",
+  "version": "1.0.0",
+  "input": {
+    "file": "examples/bad/escrow.json",
+    "format": "json",
+    "bytes": 1894,
+    "lines": 39
+  },
+  "config": {
+    "chainId": 1,
+    "tokens": [
+      {
+        "symbol": "USDC",
+        "address": "0x8888888888888888888888888888888888888888",
+        "decimals": 18,
+        "chainId": 1
+      },
+      {
+        "symbol": "WETH",
+        "address": "0x12345",
+        "decimals": 18,
+        "chainId": 10
+      }
+    ],
+    "fee": {
+      "bps": 1500,
+      "percent": "15%",
+      "recipient": "0x0000000000000000000000000000000000000000"
+    },
+    "escrow": {
+      "releaseMode": "both",
+      "releaseTimeout": 259200,
+      "disputeWindow": 604800,
+      "refundPath": "none",
+      "partialRefunds": null,
+      "milestones": [
+        {
+          "name": "Design",
+          "shareBps": 5000
+        },
+        {
+          "name": "Build",
+          "shareBps": 3000
+        },
+        {
+          "name": "milestone 3",
+          "shareBps": 0
+        }
+      ]
+    },
+    "dispute": {
+      "arbiters": 3,
+      "panelSize": 1,
+      "quorum": 2,
+      "arbiterFeeBps": null,
+      "appealWindow": null
+    },
+    "stake": {
+      "amount": "100",
+      "token": "USDC",
+      "slashBps": null
+    },
+    "eip712": {
+      "name": "Example Escrow",
+      "version": null,
+      "chainId": 10,
+      "verifyingContract": "0x0000000000000000000000000000000000000000"
+    },
+    "maxOrder": null
+  },
+  "totals": {
+    "findings": 31,
+    "byLevel": {
+      "error": 19,
+      "warning": 9,
+      "info": 3
+    },
+    "hidden": 0
+  },
+  "rules": [
+    {
+      "id": "file-unreadable",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "field-missing",
+      "level": "error",
+      "kind": "input",
+      "findings": 1
+    },
+    {
+      "id": "field-unknown",
+      "level": "warning",
+      "kind": "input",
+      "findings": 1
+    },
+    {
+      "id": "field-invalid",
+      "level": "error",
+      "kind": "input",
+      "findings": 1
+    },
+    {
+      "id": "field-duplicate",
+      "level": "error",
+      "kind": "input",
+      "findings": 1
+    },
+    {
+      "id": "secret-in-file",
+      "level": "error",
+      "kind": "input",
+      "findings": 1
+    },
+    {
+      "id": "fee-invalid",
+      "level": "error",
+      "kind": "input",
+      "findings": 1
+    },
+    {
+      "id": "release-before-dispute-window",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "no-refund-path",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "release-timeout-missing",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "fee-too-high",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "fee-recipient-zero",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "milestone-shares-not-100",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "milestone-empty",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "quorum-unreachable",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "single-arbiter",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "arbiter-is-party",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "arbiter-is-admin",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "appeal-window-missing",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "stake-slash-invalid",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "admin-single-key",
+      "level": "warning",
+      "kind": "documented",
+      "findings": 3
+    },
+    {
+      "id": "multisig-threshold-low",
+      "level": "warning",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "multisig-threshold-unreachable",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "upgrader-without-timelock",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "eip712-domain-chain-mismatch",
+      "level": "error",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "eip712-domain-missing-field",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "verifying-contract-zero",
+      "level": "error",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "token-chain-mismatch",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "token-decimals-invalid",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "address-malformed",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "zero-address",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "max-order-missing",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 1
+    }
+  ],
+  "options": {
+    "minSeverity": "info",
+    "failOn": "error",
+    "maxFeeBps": 1000
+  },
+  "findings": [
+    {
+      "id": "token-decimals-invalid",
+      "severity": "error",
+      "message": "Token USDC has 18 decimal places, but USDC keeps 6, so every amount in it would be off by a factor of 10^12. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 5,
+      "column": 82,
+      "at": "examples/bad/escrow.json:5",
+      "subject": "USDC",
+      "fix": "Write the decimals the token contract answers from decimals(); USDC on most chains has 6.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "checking the decimals of a token is a best practice of this tool, not a rule in the pages it cites; a price worked out with the wrong decimals is off by powers of ten"
+    },
+    {
+      "id": "address-malformed",
+      "severity": "error",
+      "message": "The address of token WETH, \"0x12345\", has 5 characters after 0x, not 40; an address is 0x followed by 40 hex digits. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 6,
+      "column": 25,
+      "at": "examples/bad/escrow.json:6",
+      "subject": null,
+      "fix": "Copy the address again from the wallet or the deployment.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "checking the form of an address is a best practice of this tool, not a rule in the pages it cites; the form is the one wallets write on an EVM chain, and no page is saved for it"
+    },
+    {
+      "id": "token-chain-mismatch",
+      "severity": "error",
+      "message": "Token WETH is declared on chain id 10, but the escrow is deployed on chain id 1; the address of a token on one chain is another contract, or none, on the next. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 6,
+      "column": 63,
+      "at": "examples/bad/escrow.json:6",
+      "subject": "WETH",
+      "fix": "Use the address of the token on the chain the escrow is deployed on, or correct the chain id.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "matching each token with the chain of the file is a best practice of this tool, not a rule in the pages it cites; the address of a token on one chain is another contract, or none, on the next"
+    },
+    {
+      "id": "fee-recipient-zero",
+      "severity": "error",
+      "message": "The platform fee of 1,500 basis points (15%) goes to the zero address, which no one holds, so every fee is lost. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 8,
+      "column": 33,
+      "at": "examples/bad/escrow.json:8",
+      "subject": null,
+      "fix": "Send the fee to the treasury of the marketplace, best a multisig, or set the fee to 0.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "refusing the zero address as the recipient of a fee is a best practice of this tool, not a rule in the pages it cites; a fee sent there is burnt, and a constructor that takes a zero recipient seldom says so"
+    },
+    {
+      "id": "release-before-dispute-window",
+      "severity": "error",
+      "message": "The escrow releases funds after 259,200 seconds (3 days), before its dispute window of 604,800 seconds (7 days) closes, so the seller can be paid before the buyer had the whole window to open a dispute. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 11,
+      "column": 5,
+      "at": "examples/bad/escrow.json:11",
+      "subject": null,
+      "fix": "Make the release timeout longer than the dispute window, so that no release by time can fire while a dispute may still be opened.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "comparing the release timeout with the dispute window is a best practice of this tool, not a rule in the pages it cites; the cited pages say nothing of escrow, and a release that can beat a dispute leaves the dispute with nothing to decide"
+    },
+    {
+      "id": "no-refund-path",
+      "severity": "error",
+      "message": "The escrow names \"none\" as its refundPath, so funds of an order that fails can only go to the seller or stay locked. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 13,
+      "column": 5,
+      "at": "examples/bad/escrow.json:13",
+      "subject": null,
+      "fix": "Name at least one refund path: a cancel by the seller, a ruling of the arbiters, or a refund by time when the seller does not deliver.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "asking for a refund path is a best practice of this tool, not a rule in the pages it cites; an escrow that can only release is a payment with a delay, not an escrow"
+    },
+    {
+      "id": "field-invalid",
+      "severity": "error",
+      "message": "The partialRefunds of the escrow is \"yes\"; it must be true or false.",
+      "file": "examples/bad/escrow.json",
+      "line": 14,
+      "column": 5,
+      "at": "examples/bad/escrow.json:14",
+      "subject": null,
+      "fix": "Write the value as docs/inputs.md shows: text for addresses, symbols and choices, whole numbers for chain ids, decimals, seconds, counts and basis points, plain decimal numbers for amounts, true or false for flags.",
+      "kind": "input",
+      "basis": [],
+      "own": null
+    },
+    {
+      "id": "milestone-shares-not-100",
+      "severity": "error",
+      "message": "The shares of the 3 milestones of the escrow add up to 8,000 basis points (80%), not 10,000 basis points (100%), so 2,000 basis points (20%) of every order is never released. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 15,
+      "column": 5,
+      "at": "examples/bad/escrow.json:15",
+      "subject": null,
+      "fix": "Set the shares so that they add up to 10000 basis points.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "adding up the shares of the milestones is a best practice of this tool, not a rule in the pages it cites; a split that is not the whole order leaves funds behind or over-pays"
+    },
+    {
+      "id": "field-missing",
+      "severity": "error",
+      "message": "Milestone 3 has no name.",
+      "file": "examples/bad/escrow.json",
+      "line": 18,
+      "column": 7,
+      "at": "examples/bad/escrow.json:18",
+      "subject": null,
+      "fix": "Add the field named; docs/inputs.md lists what the file needs.",
+      "kind": "input",
+      "basis": [],
+      "own": null
+    },
+    {
+      "id": "milestone-empty",
+      "severity": "error",
+      "message": "Milestone 3 has a share of 0, so it releases nothing. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 18,
+      "column": 9,
+      "at": "examples/bad/escrow.json:18",
+      "subject": "3",
+      "fix": "Remove the empty milestone or give it a share, or leave milestones out for an order paid in one release.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "refusing a milestone of nothing is a best practice of this tool, not a rule in the pages it cites; a step that releases 0 is almost always a share written in the wrong place"
+    },
+    {
+      "id": "field-duplicate",
+      "severity": "error",
+      "message": "Arbiter 3 of the dispute setup, 0x7777777777777777777777777777777777777777, is also arbiter 1; it was counted once.",
+      "file": "examples/bad/escrow.json",
+      "line": 22,
+      "column": 110,
+      "at": "examples/bad/escrow.json:22",
+      "subject": null,
+      "fix": "List each token, arbiter and signer once, and give every milestone a name of its own.",
+      "kind": "input",
+      "basis": [],
+      "own": null
+    },
+    {
+      "id": "quorum-unreachable",
+      "severity": "error",
+      "message": "The quorum of a dispute is 2 votes, but a panel holds 1 arbiter, so no dispute can ever be decided and its funds stay locked. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 24,
+      "column": 5,
+      "at": "examples/bad/escrow.json:24",
+      "subject": null,
+      "fix": "Set a quorum no larger than the panel and a panel no larger than the number of arbiters, or add arbiters.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "comparing the quorum, the panel and the arbiters is a best practice of this tool, not a rule in the pages it cites; a dispute that can never be decided locks the funds of both sides"
+    },
+    {
+      "id": "fee-invalid",
+      "severity": "error",
+      "message": "The arbiterFeeBps of the dispute setup is \"2.5\"; it must be a whole number of basis points from 0 to 10000, where 100 is 1%.",
+      "file": "examples/bad/escrow.json",
+      "line": 25,
+      "column": 5,
+      "at": "examples/bad/escrow.json:25",
+      "subject": null,
+      "fix": "Write the fee as a whole number of basis points, where 100 is 1% and 10000 is the whole order, such as 250 for 2.5%.",
+      "kind": "input",
+      "basis": [],
+      "own": null
+    },
+    {
+      "id": "stake-slash-invalid",
+      "severity": "error",
+      "message": "The slashBps of the stake is \"12000\"; it must be a whole number of basis points from 0 to 10000 of the stake. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 28,
+      "column": 48,
+      "at": "examples/bad/escrow.json:28",
+      "subject": null,
+      "fix": "Write the slash share as a whole number of basis points of the stake, from 0 to 10000, and set the stake above 0 if it can be slashed.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "checking the slash share against the stake is a best practice of this tool, not a rule in the pages it cites; a share above the whole stake cannot be paid and a share of a stake of 0 slashes nothing"
+    },
+    {
+      "id": "zero-address",
+      "severity": "error",
+      "message": "The fee setter of the roles is the zero address, which no one holds, so the role can never act. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 33,
+      "column": 5,
+      "at": "examples/bad/escrow.json:33",
+      "subject": null,
+      "fix": "Set the real address; write a native token with \"native\": true and no address.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "refusing the zero address in a role or a token is a best practice of this tool, not a rule in the pages it cites; a role held by no one is lost for good once the contract is deployed"
+    },
+    {
+      "id": "secret-in-file",
+      "severity": "error",
+      "message": "The file holds the key \"mnemonic\", which names a seed, a mnemonic or a private key. The tool never reads one, and the value is not shown.",
+      "file": "examples/bad/escrow.json",
+      "line": 35,
+      "column": 5,
+      "at": "examples/bad/escrow.json:35",
+      "subject": null,
+      "fix": "Remove the value from the file and from wherever the file was copied, treat it as exposed and move what it controls to a new key. A deployment configuration names wallets by their public address only.",
+      "kind": "input",
+      "basis": [],
+      "own": null
+    },
+    {
+      "id": "multisig-threshold-unreachable",
+      "severity": "error",
+      "message": "The multisig needs 3 signatures but lists 2 signers, so it can never act. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 36,
+      "column": 76,
+      "at": "examples/bad/escrow.json:36",
+      "subject": null,
+      "fix": "Lower the threshold to the number of signers or fewer, or add the missing signers.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "comparing the threshold with the signers is a best practice of this tool, not a rule in the pages it cites; the cited page describes a minimum number of signatures but not this mistake"
+    },
+    {
+      "id": "eip712-domain-chain-mismatch",
+      "severity": "error",
+      "message": "The chainId of the EIP-712 domain is 10, but the escrow is deployed on chain id 1. EIP-712 has a wallet decline to sign when the chainId of the domain is not the one of the active chain, so listings would be refused or signed for another chain.",
+      "file": "examples/bad/escrow.json",
+      "line": 38,
+      "column": 41,
+      "at": "examples/bad/escrow.json:38",
+      "subject": null,
+      "fix": "Set the chainId of the domain to the chain the escrow is deployed on, or correct the chain id of the file.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "In the signing domain of EIP-712 the chainId field holds the EIP-155 id of the chain, and a wallet is expected to decline to sign when that id is not the one of the chain it is connected to.",
+          "source": "EIP-712: Typed structured data hashing and signing",
+          "url": "https://eips.ethereum.org/EIPS/eip-712"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "verifying-contract-zero",
+      "severity": "error",
+      "message": "The verifyingContract of the EIP-712 domain is the zero address, though EIP-712 has the field name the contract that checks the signature; no contract is at the zero address, so a signed listing names none.",
+      "file": "examples/bad/escrow.json",
+      "line": 38,
+      "column": 56,
+      "at": "examples/bad/escrow.json:38",
+      "subject": null,
+      "fix": "Set verifyingContract to the address of the escrow or marketplace contract that checks signed listings.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "In the signing domain of EIP-712 the verifyingContract field names the contract that is to check the signature, and a wallet may use it to guard against phishing.",
+          "source": "EIP-712: Typed structured data hashing and signing",
+          "url": "https://eips.ethereum.org/EIPS/eip-712"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "fee-too-high",
+      "severity": "warning",
+      "message": "The platform fee is 1,500 basis points (15%), above the 1,000 basis points (10%) of --max-fee-bps. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 8,
+      "column": 20,
+      "at": "examples/bad/escrow.json:8",
+      "subject": null,
+      "fix": "Lower the fee, or raise --max-fee-bps for a marketplace whose fee is high on purpose.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "warning above 1000 basis points is a best practice of this tool, not a rule in the pages it cites; the cited pages set no fee, and the threshold can be changed with --max-fee-bps"
+    },
+    {
+      "id": "arbiter-is-party",
+      "severity": "warning",
+      "message": "Arbiter 1 of the dispute setup, 0x7777777777777777777777777777777777777777, is also the treasury, so it rules on disputes over money it is paid from. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 22,
+      "column": 18,
+      "at": "examples/bad/escrow.json:22",
+      "subject": null,
+      "fix": "Choose arbiters who are paid neither the platform fee nor from the treasury, or keep the overlap and say so to buyers and sellers.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "keeping arbiters apart from the money of the marketplace is a best practice of this tool, not a rule in the pages it cites; the cited pages say nothing of disputes"
+    },
+    {
+      "id": "arbiter-is-admin",
+      "severity": "warning",
+      "message": "Arbiter 2 of the dispute setup, 0x5555555555555555555555555555555555555555, is also the pauser of the escrow, so one party can both rule on a dispute and change the rules. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 22,
+      "column": 64,
+      "at": "examples/bad/escrow.json:22",
+      "subject": null,
+      "fix": "Choose arbiters who hold no role of the contracts.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "keeping arbiters apart from the roles that change the contracts is a best practice of this tool, not a rule in the pages it cites; an arbiter who can upgrade or pause the escrow can decide a dispute twice"
+    },
+    {
+      "id": "single-arbiter",
+      "severity": "warning",
+      "message": "A panel of a dispute holds one arbiter, so one person decides every dispute alone. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 23,
+      "column": 5,
+      "at": "examples/bad/escrow.json:23",
+      "subject": null,
+      "fix": "Name more arbiters and a panel of three or more with a majority quorum, so that no one person decides alone.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "asking for more than one arbiter is a best practice of this tool, not a rule in the pages it cites; a small marketplace may start with one on purpose, so it is a warning"
+    },
+    {
+      "id": "field-unknown",
+      "severity": "warning",
+      "message": "The key \"appealWindw\" of the dispute setup is not one the tool reads, so its value was left out of every check. Did you mean \"appealWindow\"? The keys of the dispute setup are arbiters, panelSize, quorum, arbiterFeeBps, appealWindow, notes.",
+      "file": "examples/bad/escrow.json",
+      "line": 26,
+      "column": 5,
+      "at": "examples/bad/escrow.json:26",
+      "subject": null,
+      "fix": "Correct the spelling to a field of docs/inputs.md, or remove it.",
+      "kind": "input",
+      "basis": [],
+      "own": null
+    },
+    {
+      "id": "admin-single-key",
+      "severity": "warning",
+      "message": "The owner of the escrow, 0x1111111111111111111111111111111111111111, is not the multisig of the file, so one key can change every rule of the escrow. The ethereum.org page on smart contract security calls one owner key a single point of failure and suggests a multi-signature account.",
+      "file": "examples/bad/escrow.json",
+      "line": 30,
+      "column": 5,
+      "at": "examples/bad/escrow.json:30",
+      "subject": null,
+      "fix": "Make the owner, the fee setter and the treasury the multisig, and the upgrader the multisig or a timelock it controls; set them in roles.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "The ethereum.org page on smart contract security calls one address as the owner of a contract a single point of failure: whoever gets the keys of that address can attack the contract.",
+          "source": "Smart contract security, ethereum.org developer documentation",
+          "url": "https://ethereum.org/en/developers/docs/smart-contracts/security/"
+        },
+        {
+          "text": "The same page suggests managing a contract from a multi-signature account, which acts only with the signatures of a minimum number of its owners, so that a change needs the consent of more than one party.",
+          "source": "Smart contract security, ethereum.org developer documentation",
+          "url": "https://ethereum.org/en/developers/docs/smart-contracts/security/"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "admin-single-key",
+      "severity": "warning",
+      "message": "The upgrader of the escrow, 0x6666666666666666666666666666666666666666, is not the multisig of the file or its timelock, so one key can replace the code of the escrow. The ethereum.org page on smart contract security calls one owner key a single point of failure and suggests a multi-signature account.",
+      "file": "examples/bad/escrow.json",
+      "line": 32,
+      "column": 5,
+      "at": "examples/bad/escrow.json:32",
+      "subject": null,
+      "fix": "Make the owner, the fee setter and the treasury the multisig, and the upgrader the multisig or a timelock it controls; set them in roles.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "The ethereum.org page on smart contract security calls one address as the owner of a contract a single point of failure: whoever gets the keys of that address can attack the contract.",
+          "source": "Smart contract security, ethereum.org developer documentation",
+          "url": "https://ethereum.org/en/developers/docs/smart-contracts/security/"
+        },
+        {
+          "text": "The same page suggests managing a contract from a multi-signature account, which acts only with the signatures of a minimum number of its owners, so that a change needs the consent of more than one party.",
+          "source": "Smart contract security, ethereum.org developer documentation",
+          "url": "https://ethereum.org/en/developers/docs/smart-contracts/security/"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "admin-single-key",
+      "severity": "warning",
+      "message": "The treasury of the escrow, 0x7777777777777777777777777777777777777777, is not the multisig of the file, so one key holds the fees of the marketplace. The ethereum.org page on smart contract security calls one owner key a single point of failure and suggests a multi-signature account.",
+      "file": "examples/bad/escrow.json",
+      "line": 34,
+      "column": 5,
+      "at": "examples/bad/escrow.json:34",
+      "subject": null,
+      "fix": "Make the owner, the fee setter and the treasury the multisig, and the upgrader the multisig or a timelock it controls; set them in roles.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "The ethereum.org page on smart contract security calls one address as the owner of a contract a single point of failure: whoever gets the keys of that address can attack the contract.",
+          "source": "Smart contract security, ethereum.org developer documentation",
+          "url": "https://ethereum.org/en/developers/docs/smart-contracts/security/"
+        },
+        {
+          "text": "The same page suggests managing a contract from a multi-signature account, which acts only with the signatures of a minimum number of its owners, so that a change needs the consent of more than one party.",
+          "source": "Smart contract security, ethereum.org developer documentation",
+          "url": "https://ethereum.org/en/developers/docs/smart-contracts/security/"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "eip712-domain-missing-field",
+      "severity": "warning",
+      "message": "The EIP-712 domain has no version, so a listing signed in it is not bound to this version. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 38,
+      "column": 3,
+      "at": "examples/bad/escrow.json:38",
+      "subject": null,
+      "fix": "Give the domain its name, version, chainId and verifyingContract, so that a signature is bound to this marketplace, this version, this chain and this contract.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "asking for all four fields is a best practice of this tool, not a rule in the pages it cites; EIP-712 lets a protocol leave out the fields that do not fit it, but a listing signed without them can be used where it was not meant to be"
+    },
+    {
+      "id": "max-order-missing",
+      "severity": "info",
+      "message": "The file sets no limits.maxOrderValue, so one order can lock any amount in the escrow. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 1,
+      "column": 1,
+      "at": "examples/bad/escrow.json:1",
+      "subject": null,
+      "fix": "Set limits.maxOrderValue with its token, at the largest order the marketplace means to hold.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "asking for a largest order is a best practice of this tool, not a rule in the pages it cites; a cap limits what one bug or one dispute can lock, but many escrows have none, so it is a note"
+    },
+    {
+      "id": "appeal-window-missing",
+      "severity": "info",
+      "message": "The dispute setup gives no appealWindow, so a ruling is final at once. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 21,
+      "column": 3,
+      "at": "examples/bad/escrow.json:21",
+      "subject": null,
+      "fix": "Add an appeal window in seconds if a ruling may be appealed, or keep rulings final on purpose.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "noting that a ruling cannot be appealed is a best practice of this tool, not a rule in the pages it cites; appeals are common but not universal, so it is a note"
+    },
+    {
+      "id": "upgrader-without-timelock",
+      "severity": "info",
+      "message": "The upgrader of the escrow, 0x6666666666666666666666666666666666666666, is not a timelock, and the roles name none, so an upgrade takes effect at once and users cannot leave first. This is a best practice of this tool, not a rule in the pages it cites.",
+      "file": "examples/bad/escrow.json",
+      "line": 32,
+      "column": 5,
+      "at": "examples/bad/escrow.json:32",
+      "subject": null,
+      "fix": "Name a timelock in roles.timelock and make it the upgrader, or keep upgrades immediate on purpose and say so.",
+      "kind": "best practice",
+      "basis": [],
+      "own": "asking for a timelock in front of upgrades is a best practice of this tool, not a rule in the pages it cites; the security page of ethereum.org names timelocks for governance and emergency stops, not for upgrades, so it is a note"
+    }
+  ],
+  "roles": [
+    {
+      "role": "owner",
+      "address": "0x1111111111111111111111111111111111111111",
+      "heldBy": "one key"
+    },
+    {
+      "role": "pauser",
+      "address": "0x5555555555555555555555555555555555555555",
+      "heldBy": "one key"
+    },
+    {
+      "role": "upgrader",
+      "address": "0x6666666666666666666666666666666666666666",
+      "heldBy": "one key"
+    },
+    {
+      "role": "fee setter",
+      "address": "0x0000000000000000000000000000000000000000",
+      "heldBy": "zero address"
+    },
+    {
+      "role": "treasury",
+      "address": "0x7777777777777777777777777777777777777777",
+      "heldBy": "one key"
+    },
+    {
+      "role": "timelock",
+      "address": null,
+      "heldBy": null
+    },
+    {
+      "role": "multisig",
+      "address": "0x2222222222222222222222222222222222222222",
+      "heldBy": "3 of 2 signers"
+    }
+  ],
+  "notes": [],
+  "notice": "This report is an input to a review of a marketplace escrow configuration before its contracts are deployed: not legal or financial advice, not an audit of the escrow contracts and not a guarantee that funds will be released or refunded as intended.",
+  "result": {
+    "pass": false,
+    "failOn": "error",
+    "text": "FAIL - 19 findings at or above error (19 error, 9 warning, 3 info)"
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "tool": "marketplace-escrow-check",
+  "version": "1.0.0",
+  "input": {
+    "file": "examples/good/escrow.json",
+    "format": "json",
+    "bytes": 2337,
+    "lines": 41
+  },
+  "config": {
+    "chainId": 1,
+    "tokens": [
+      {
+        "symbol": "USDC",
+        "address": "0x8888888888888888888888888888888888888888",
+        "decimals": 6,
+        "chainId": 1
+      },
+      {
+        "symbol": "ETH",
+        "address": "native",
+        "decimals": 18,
+        "chainId": 1
+      }
+    ],
+    "fee": {
+      "bps": 250,
+      "percent": "2.5%",
+      "recipient": "0x2222222222222222222222222222222222222222"
+    },
+    "escrow": {
+      "releaseMode": "both",
+      "releaseTimeout": 1209600,
+      "disputeWindow": 604800,
+      "refundPath": [
+        "seller",
+        "arbiter"
+      ],
+      "partialRefunds": true,
+      "milestones": [
+        {
+          "name": "Design",
+          "shareBps": 3000
+        },
+        {
+          "name": "Build",
+          "shareBps": 3000
+        },
+        {
+          "name": "Handover",
+          "shareBps": 4000
+        }
+      ]
+    },
+    "dispute": {
+      "arbiters": 5,
+      "panelSize": 3,
+      "quorum": 2,
+      "arbiterFeeBps": 100,
+      "appealWindow": 259200
+    },
+    "stake": {
+      "amount": "100",
+      "token": "USDC",
+      "slashBps": 5000
+    },
+    "eip712": {
+      "name": "Example Escrow",
+      "version": "1",
+      "chainId": 1,
+      "verifyingContract": "0x1111111111111111111111111111111111111111"
+    },
+    "maxOrder": {
+      "value": "50000",
+      "token": "USDC"
+    }
+  },
+  "totals": {
+    "findings": 0,
+    "byLevel": {
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "hidden": 0
+  },
+  "rules": [
+    {
+      "id": "file-unreadable",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "field-missing",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "field-unknown",
+      "level": "warning",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "field-invalid",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "field-duplicate",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "secret-in-file",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "fee-invalid",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "release-before-dispute-window",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "no-refund-path",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "release-timeout-missing",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "fee-too-high",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "fee-recipient-zero",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "milestone-shares-not-100",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "milestone-empty",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "quorum-unreachable",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "single-arbiter",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "arbiter-is-party",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "arbiter-is-admin",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "appeal-window-missing",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "stake-slash-invalid",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "admin-single-key",
+      "level": "warning",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "multisig-threshold-low",
+      "level": "warning",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "multisig-threshold-unreachable",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "upgrader-without-timelock",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "eip712-domain-chain-mismatch",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "eip712-domain-missing-field",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "verifying-contract-zero",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "token-chain-mismatch",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "token-decimals-invalid",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "address-malformed",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "zero-address",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "max-order-missing",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 0
+    }
+  ],
+  "options": {
+    "minSeverity": "info",
+    "failOn": "error",
+    "maxFeeBps": 1000
+  },
+  "findings": [],
+  "roles": [
+    {
+      "role": "owner",
+      "address": "0x2222222222222222222222222222222222222222",
+      "heldBy": "multisig"
+    },
+    {
+      "role": "pauser",
+      "address": "0x5555555555555555555555555555555555555555",
+      "heldBy": "one key"
+    },
+    {
+      "role": "upgrader",
+      "address": "0x9999999999999999999999999999999999999999",
+      "heldBy": "timelock"
+    },
+    {
+      "role": "fee setter",
+      "address": "0x2222222222222222222222222222222222222222",
+      "heldBy": "multisig"
+    },
+    {
+      "role": "treasury",
+      "address": "0x2222222222222222222222222222222222222222",
+      "heldBy": "multisig"
+    },
+    {
+      "role": "timelock",
+      "address": "0x9999999999999999999999999999999999999999",
+      "heldBy": "timelock"
+    },
+    {
+      "role": "multisig",
+      "address": "0x2222222222222222222222222222222222222222",
+      "heldBy": "3 of 5 signers"
+    }
+  ],
+  "notes": [],
+  "notice": "This report is an input to a review of a marketplace escrow configuration before its contracts are deployed: not legal or financial advice, not an audit of the escrow contracts and not a guarantee that funds will be released or refunded as intended.",
+  "result": {
+    "pass": true,
+    "failOn": "error",
+    "text": "PASS - no finding at or above error"
+  }
+}
