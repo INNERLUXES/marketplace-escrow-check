@@ -1,0 +1,52 @@
+{
+  "name": "marketplace-escrow-check",
+  "version": "1.0.0",
+  "description": "Marketplace escrow check: reads the JSON configuration of the escrow of a peer to peer marketplace before its contracts are deployed (the chain id, the payment tokens, the platform fee, the release mode, release timeout, dispute window, refund path and milestones, the arbiters, panel, quorum, arbiter fee and appeal window, the stake of a seller, the roles with their multisig, the EIP-712 domain of signed listings and the largest order), contacts no chain, node or API, fetches nothing, signs nothing, deploys nothing and reads no clock, and lists with its line every mistake a smart contract developer would catch before deployment: a release that can fire before the dispute window closes, no refund path, a release that waits on the buyer alone, a fee too high, written wrong or sent to the zero address, milestones that are not the whole order, a quorum that can never be met, a single arbiter or one paid by the marketplace or holding a role, a slash share that cannot be applied, roles held by one key, a multisig of one signature or one that can never act, an upgrade with no timelock, an EIP-712 domain of another chain, with missing fields or a zero verifying contract, tokens of another chain or with the wrong decimals, and malformed or zero addresses. Not legal or financial advice. Text, markdown, JSON and SARIF output, exit codes for a pipeline, no dependencies.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "marketplace-escrow-check": "bin/marketplace-escrow-check.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "docs",
+    "examples",
+    "research",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\"",
+    "test:coverage": "node --test --experimental-test-coverage \"test/*.test.js\"",
+    "check": "node tools/check.mjs",
+    "example": "node tools/example.mjs"
+  },
+  "keywords": [
+    "decentralized-marketplace",
+    "marketplace",
+    "escrow",
+    "peer-to-peer",
+    "smart-contracts",
+    "solidity",
+    "eip-712",
+    "multisig",
+    "security",
+    "static-analysis",
+    "sarif",
+    "cli"
+  ],
+  "author": "INNERLUXES <info@innerluxes.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INNERLUXES/marketplace-escrow-check.git"
+  },
+  "homepage": "https://innerluxes.dev/blockchain/decentralized-marketplace"
+}
